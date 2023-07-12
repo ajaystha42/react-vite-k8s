@@ -1,12 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 // import { useNavigate } from "react-router-dom";
+import { jwt, useLoggedIn } from "./../../services/login";
 
 const API_URL = "http://localhost:8000/api/user/";
 const Login = ({ user }: any) => {
+  const loggedIn = useLoggedIn();
   const [isLogin, setIsLogin] = useState<boolean>(false);
   // const navigate = useNavigate();
-
+  console.log({ loggedIn, user });
   useEffect(() => {
     if (user) {
       setIsLogin(true);
@@ -20,10 +22,15 @@ const Login = ({ user }: any) => {
   const clickHandler = async () => {
     const url = API_URL + `${isLogin ? "login" : "signup"}`;
     const response = await axios.post(url, userData);
-    const { data } = response;
-    if (data) {
-      localStorage.setItem("user", JSON.stringify(data));
-      // navigate("/");
+    if (isLogin) {
+      const { data } = response;
+      if (data) {
+        jwt.next(data.user?.token);
+        localStorage.setItem("user", JSON.stringify(data));
+        // navigate("/");
+      }
+    } else {
+      // signup
     }
   };
 
@@ -88,8 +95,11 @@ const Login = ({ user }: any) => {
         </div>
       </div>
       <button
-        className="mb-6 rounded-xl bg-blue-600 px-8 py-3 font-medium text-white hover:bg-blue-700"
+        className={`mb-6 rounded-xl bg-${
+          !!user ? "gray" : "blue"
+        }-600 px-8 py-3 font-medium text-white hover:bg-blue-700`}
         onClick={clickHandler}
+        disabled={!!user}
       >
         {isLogin ? "Login" : "Get Started"}
       </button>
