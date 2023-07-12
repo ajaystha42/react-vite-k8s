@@ -1,18 +1,16 @@
-import { useEffect, useState } from "react";
-import Login from "./components/Login/Login";
+import { useEffect } from "react";
 import { jwt } from "./services/login";
+import Login from "./components/Login/Login";
 
 function App() {
-  const [user, setUser] = useState<any>();
   useEffect(() => {
     const userInfo = localStorage.getItem("user");
     if (userInfo) {
       const obj = JSON.parse(userInfo);
       jwt.next(obj?.token);
-      setUser(obj);
     }
   }, []);
-  return <Login user={user} />;
+  return <Login />;
 }
 
 export default App;

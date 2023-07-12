@@ -9,6 +9,7 @@ export default defineConfig({
       name: "login",
       filename: "remoteEntry.js",
       exposes: {
+        "./loginService": "./src/services/login.ts",
         "./Login": "./src/components/Login/Login",
       },
       shared: ["react", "react-dom", "axios"],

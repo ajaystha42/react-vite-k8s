@@ -4,17 +4,17 @@ import { useEffect, useState } from "react";
 import { jwt, useLoggedIn } from "./../../services/login";
 
 const API_URL = "http://localhost:8000/api/user/";
-const Login = ({ user }: any) => {
+const Login = () => {
   const loggedIn = useLoggedIn();
   const [isLogin, setIsLogin] = useState<boolean>(false);
   // const navigate = useNavigate();
-  console.log({ loggedIn, user });
   useEffect(() => {
-    if (user) {
+    if (loggedIn) {
       setIsLogin(true);
     } else setIsLogin(false);
-  }, [user]);
+  }, [loggedIn]);
 
+  console.log({ loggedIn, isLogin });
   const [userData, setUserData] = useState<{ email: string; password: string }>(
     { email: "", password: "" }
   );
@@ -95,11 +95,9 @@ const Login = ({ user }: any) => {
         </div>
       </div>
       <button
-        className={`mb-6 rounded-xl bg-${
-          !!user ? "gray" : "blue"
-        }-600 px-8 py-3 font-medium text-white hover:bg-blue-700`}
+        className="mb-6 rounded-xl bg-blue-600 px-8 py-3 font-medium text-white hover:bg-blue-700"
         onClick={clickHandler}
-        disabled={!!user}
+        disabled={!!loggedIn}
       >
         {isLogin ? "Login" : "Get Started"}
       </button>
