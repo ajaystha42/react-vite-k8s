@@ -4,13 +4,14 @@ WORKDIR /app
 
 COPY package*.json .
 
-RUN npm install
+RUN npm install -g pnpm
+
+RUN pnpm install
 
 COPY . .
 
-RUN npm build
+RUN pnpm build
 
 EXPOSE 3000
 
-CMD ["npm", "serve", "--host", "0.0.0.0"]
-
+CMD ["pnpm", "serve", "--host", "0.0.0.0"]
