@@ -1,5 +1,7 @@
+import Settings from "./components/Settings/Settings";
+
 function App() {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+  return <Settings />;
 }
 
 export default App;

@@ -1,5 +1,7 @@
+import Payments from "./components/Payments/Payments";
+
 function App() {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+  return <Payments />;
 }
 
 export default App;
