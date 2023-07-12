@@ -1,3 +1,5 @@
 export default function SendMoney() {
-  return <h1 className="text-1xl underline">Hello From SendMoney!</h1>;
+  return (
+    <h1 className="text-2xl font-black text-gray-800">Hello From SendMoney!</h1>
+  );
 }

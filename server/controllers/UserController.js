@@ -58,7 +58,7 @@ exports.login = (req, res, next) => {
         email: fetchedUser.email,
         token: token,
         expiresIn: 3600,
-        message: "User Authenticated Successfully",
+        // message: "User Authenticated Successfully",
       });
     })
     .catch((error) => {

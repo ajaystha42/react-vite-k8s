@@ -11,7 +11,7 @@ export default defineConfig({
       exposes: {
         "./Login": "./src/components/Login/Login",
       },
-      shared: ["react", "react-dom"],
+      shared: ["react", "react-dom", "axios"],
     }),
   ],
   build: {

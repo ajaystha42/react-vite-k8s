@@ -1,3 +1,5 @@
 export default function Cards() {
-  return <h1 className="text-1xl underline">Hello From Cards!</h1>;
+  return (
+    <h1 className="text-2xl font-black text-gray-800">Hello From Cards!</h1>
+  );
 }

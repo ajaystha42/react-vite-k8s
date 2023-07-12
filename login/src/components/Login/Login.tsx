@@ -1,16 +1,60 @@
-const Login = () => {
+import axios from "axios";
+import { useEffect, useState } from "react";
+// import { useNavigate } from "react-router-dom";
+
+const API_URL = "http://localhost:8000/api/user/";
+const Login = ({ user }: any) => {
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+  // const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      setIsLogin(true);
+    } else setIsLogin(false);
+  }, [user]);
+
+  const [userData, setUserData] = useState<{ email: string; password: string }>(
+    { email: "", password: "" }
+  );
+
+  const clickHandler = async () => {
+    const url = API_URL + `${isLogin ? "login" : "signup"}`;
+    const response = await axios.post(url, userData);
+    const { data } = response;
+    if (data) {
+      localStorage.setItem("user", JSON.stringify(data));
+      // navigate("/");
+    }
+  };
+
   return (
     <div className="mx-auto my-10 max-w-md rounded-xl border px-4 py-10 text-gray-700 shadow-lg sm:px-8">
       <div className="mb-16 flex justify-between">
         <span className="font-bold">
-          <span className="inline-block h-3 w-3 bg-blue-600"></span> Calvin
+          <span className="inline-block h-3 w-3 bg-blue-600"></span>{" "}
+          Fusemachines
         </span>
-        <span className="">
-          Have account?{" "}
-          <a href="#" className="font-medium text-blue-600 hover:underline">
-            Log in
-          </a>
-        </span>
+        {!isLogin ? (
+          <span className="">
+            Have account?{" "}
+            <a
+              onClick={() => setIsLogin(true)}
+              className="font-medium text-blue-600 hover:underline"
+            >
+              Log in
+            </a>
+          </span>
+        ) : (
+          <span className="">
+            No account?{" "}
+            <a
+              onClick={() => setIsLogin(false)}
+              className="font-medium text-blue-600 hover:underline"
+            >
+              Signup
+            </a>
+          </span>
+        )}
       </div>
       <p className="mb-5 text-3xl font-medium">
         Manage your produce business us!
@@ -26,6 +70,9 @@ const Login = () => {
             id="email"
             className="w-full flex-1 appearance-none border-blue-300 bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
             placeholder="Email"
+            onChange={(e) => {
+              setUserData({ ...userData, email: e.target.value });
+            }}
           />
         </div>
         <div className="focus-within:border-b-blue-500 relative mb-3 flex overflow-hidden border-b-2 transition">
@@ -34,11 +81,17 @@ const Login = () => {
             id="password"
             className="w-full flex-1 appearance-none border-blue-300 bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
             placeholder="Password"
+            onChange={(e) => {
+              setUserData({ ...userData, password: e.target.value });
+            }}
           />
         </div>
       </div>
-      <button className="mb-6 rounded-xl bg-blue-600 px-8 py-3 font-medium text-white hover:bg-blue-700">
-        Get Started
+      <button
+        className="mb-6 rounded-xl bg-blue-600 px-8 py-3 font-medium text-white hover:bg-blue-700"
+        onClick={clickHandler}
+      >
+        {isLogin ? "Login" : "Get Started"}
       </button>
       <p className="">
         By signing up you are agreeing to our{" "}

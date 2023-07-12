@@ -7,8 +7,21 @@ import SendMoney from "sendMoneyApp/SendMoney";
 import Payments from "paymentsApp/Payments";
 import Cards from "cardsApp/Cards";
 import Settings from "settingsApp/Settings";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const [user, setUser] = useState<any>("");
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const userInfo = localStorage.getItem("user");
+    if (!userInfo) {
+      navigate("/");
+    } else setUser(userInfo);
+  }, []);
+  console.log({ user });
   return (
     <div className="bg-slate-200 flex h-screen">
       <aside className="fixed z-50 md:relative">
@@ -48,7 +61,7 @@ const Dashboard = () => {
           </a>
           <ul className="mt-8 space-y-3 md:mt-20">
             <li className="relative">
-              <a href="/overview">
+              <Link to="/overview">
                 <button className="focus:bg-slate-600 hover:bg-slate-600 flex w-full space-x-2 rounded-md px-10 py-4 text-gray-300 focus:outline-none">
                   <span>
                     <svg
@@ -68,10 +81,10 @@ const Dashboard = () => {
                   </span>
                   <span className="">Overview</span>
                 </button>
-              </a>
+              </Link>
             </li>
             <li className="relative">
-              <a href="/transaction">
+              <Link to="/transaction">
                 <button className="focus:bg-slate-600 hover:bg-slate-600 flex w-full space-x-2 rounded-md px-10 py-4 font-semibold focus:outline-none">
                   <span>
                     <svg
@@ -91,7 +104,7 @@ const Dashboard = () => {
                   </span>
                   <span className="">Transaction</span>
                 </button>
-              </a>
+              </Link>
               <svg
                 className="text-slate-200 absolute -right-1 -top-1/2 z-10 hidden h-32 w-8 md:block"
                 xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +119,7 @@ const Dashboard = () => {
               </svg>
             </li>
             <li className="relative">
-              <a href="/sendMoney">
+              <Link to="/sendMoney">
                 <button className="focus:bg-slate-600 hover:bg-slate-600 flex w-full space-x-2 rounded-md px-10 py-4 text-gray-300 focus:outline-none">
                   <span>
                     <svg
@@ -126,10 +139,10 @@ const Dashboard = () => {
                   </span>
                   <span className="">Send Money</span>
                 </button>
-              </a>
+              </Link>
             </li>
             <li className="relative">
-              <a href="/payments">
+              <Link to="/payments">
                 <button className="focus:bg-slate-600 hover:bg-slate-600 flex w-full space-x-2 rounded-md px-10 py-4 text-gray-300 focus:outline-none">
                   <span className="text-2xl">
                     <svg
@@ -158,10 +171,10 @@ const Dashboard = () => {
                   </span>
                   <span className="">Payments</span>
                 </button>
-              </a>
+              </Link>
             </li>
             <li className="relative">
-              <a href="/cards">
+              <Link to="/cards">
                 <button className="focus:bg-slate-600 hover:bg-slate-600 flex w-full space-x-2 rounded-md px-10 py-4 text-gray-300 focus:outline-none">
                   <span>
                     <svg
@@ -181,10 +194,10 @@ const Dashboard = () => {
                   </span>
                   <span className="">Cards</span>
                 </button>
-              </a>
+              </Link>
             </li>
             <li className="relative">
-              <a href="/settings">
+              <Link to="/settings">
                 <button className="focus:bg-slate-600 hover:bg-slate-600 flex w-full space-x-2 rounded-md px-10 py-4 text-gray-300 focus:outline-none">
                   <span>
                     <svg
@@ -209,7 +222,7 @@ const Dashboard = () => {
                   </span>
                   <span className="">Settings</span>
                 </button>
-              </a>
+              </Link>
             </li>
           </ul>
 
@@ -255,28 +268,29 @@ const Dashboard = () => {
               />
             </div> */}
 
-            <ul className="mx-auto mt-4 flex space-x-6 sm:mx-5 sm:mt-0">
-              <li className="">
-                <a href="/login">
-                  <button className="flex h-8 w-8 items-center justify-center rounded-xl border text-gray-600 hover:text-black hover:shadow">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                  </button>
-                </a>
-              </li>
-              {/* <li className="">
+            {!user && (
+              <ul className="mx-auto mt-4 flex space-x-6 sm:mx-5 sm:mt-0">
+                <li className="">
+                  <Link to="/login">
+                    <button className="flex h-8 w-8 items-center justify-center rounded-xl border text-gray-600 hover:text-black hover:shadow">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    </button>
+                  </Link>
+                </li>
+                {/* <li className="">
                 <button className="flex h-8 w-8 items-center justify-center rounded-xl border text-gray-600 hover:text-black hover:shadow">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -317,7 +331,8 @@ const Dashboard = () => {
                   </svg>
                 </button>
               </li> */}
-            </ul>
+              </ul>
+            )}
           </div>
         </header>
         <div className="h-full overflow-hidden pl-10">
@@ -332,29 +347,39 @@ const Dashboard = () => {
                   return (
                     <>
                       <h1 className="text-2xl font-black text-gray-800">
-                        Good Morning!
+                        Good Morning! {user ? "Logged In!!" : "Login Required"}
                       </h1>
                       <p className="mb-6 text-gray-600">
                         Here's an overview of your monthly transactions.
                       </p>
-                      <div className="flex flex-wrap gap-x-4 gap-y-8">
+                      {/* <div className="flex flex-wrap gap-x-4 gap-y-8">
                         <div className="h-56 w-72 rounded-xl bg-white p-10 shadow-md"></div>
                         <div className="h-56 w-72 rounded-xl bg-white p-10 shadow-md"></div>
                         <div className="h-56 w-full rounded-xl bg-white p-10 shadow-md"></div>
                         <div className="h-56 w-full rounded-xl bg-white p-10 shadow-md"></div>
                         <div className="h-56 w-full rounded-xl bg-white p-10 shadow-md"></div>
-                      </div>
+                      </div> */}
                     </>
                   );
                 }}
               />
               <Route path="/login" Component={Login} />
-              <Route path="/overview" Component={Overview} />
-              <Route path="/transaction" Component={Transaction} />
-              <Route path="/sendMoney" Component={SendMoney} />
-              <Route path="/payments" Component={Payments} />
-              <Route path="/cards" Component={Cards} />
-              <Route path="/settings" Component={Settings} />
+
+              {user
+                ? [
+                    // add as many as you'd like here
+                    <>
+                      <Route path="/overview" Component={Overview} />
+                      <Route path="/transaction" Component={Transaction} />
+                      <Route path="/sendMoney" Component={SendMoney} />
+                      <Route path="/payments" Component={Payments} />
+                      <Route path="/cards" Component={Cards} />
+                      <Route path="/settings" Component={Settings} />
+                    </>,
+                  ]
+                : null}
+
+              <Route path={"*"} element={<Navigate replace to={"/"} />} />
             </Routes>
           </main>
         </div>
