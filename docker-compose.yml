@@ -1,0 +1,75 @@
+version: '3'
+services:
+  server:
+    build: ./server
+    # volumes:
+    #   - .:/app
+    ports:
+      - 8000:8000
+    image: server:2.4
+    container_name: server_container
+  cards:
+    build: 
+      context: ./cards
+    ports:
+      - 3006:3006
+    image: cards:10.0
+    container_name: cards_container
+    command: pnpm serve --host 0.0.0.0
+  dashboard:
+    build: 
+      context: ./dashboard
+    ports:
+      - 3000:3000
+    image: dashboard:1.0
+    container_name: dashboard_container
+    command: pnpm serve --host 0.0.0.0
+  login:
+    build: 
+      context: ./login
+    ports:
+      - 3001:3001
+    image: login:1.0
+    container_name: login_container
+    command: pnpm serve --host 0.0.0.0
+  overview:
+    build: 
+      context: ./overview
+    ports:
+      - 3002:3002
+    image: overview:2.0
+    container_name: overview_container
+    command: pnpm serve --host 0.0.0.0
+  payments:
+    build: 
+      context: ./payments
+    ports:
+      - 3005:3005
+    image: payments:1.0
+    container_name: payments_container
+    command: pnpm serve --host 0.0.0.0
+  send_money:
+    build: 
+      context: ./send_money
+    ports:
+      - 3004:3004
+    image: send_money:1.0
+    container_name: send_money_container
+    command: pnpm serve --host 0.0.0.0
+  settings:
+    build: 
+      context: ./settings
+    ports:
+      - 3007:3007
+    image: settings:1.0
+    container_name: settings_container
+    command: pnpm serve --host 0.0.0.0
+  transaction:
+    build: 
+      context: ./transaction
+    ports:
+      - 3003:3003
+    image: transaction:2.0
+    container_name: transaction_container
+    command: pnpm serve --host 0.0.0.0
+  
