@@ -10,18 +10,18 @@ import Settings from "settingsApp/Settings";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
+import { jwt, useLoggedIn } from "loginApp/loginService";
 
 const Dashboard = () => {
-  const [user, setUser] = useState<any>("");
+  const [user, setUser] = useState<any>({});
   const navigate = useNavigate();
-  
-  useEffect(() => {
-    const userInfo = localStorage.getItem("user");
-    if (!userInfo) {
-      navigate("/");
-    } else setUser(userInfo);
-  }, []);
-  console.log({ user });
+  const loggedIn = useLoggedIn();
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    jwt.next(null);
+  };
+
   return (
     <div className="bg-slate-200 flex h-screen">
       <aside className="fixed z-50 md:relative">
@@ -49,7 +49,7 @@ const Dashboard = () => {
           aria-label="Sidebar Navigation"
           className="peer-checked:w-64 left-0 z-10 flex h-screen w-0 flex-col overflow-hidden bg-gray-700 text-white transition-all md:h-screen md:w-64 lg:w-72"
         >
-          <a href="/">
+          <Link to="/">
             <div className="bg-slate-800 mt-5 py-4 pl-10 md:mt-10">
               <span className="">
                 <span className="mr-1 inline-flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 align-bottom text-2xl font-bold">
@@ -58,7 +58,7 @@ const Dashboard = () => {
                 <span className="text-xl">rbane</span>
               </span>
             </div>
-          </a>
+          </Link>
           <ul className="mt-8 space-y-3 md:mt-20">
             <li className="relative">
               <Link to="/overview">
@@ -227,15 +227,27 @@ const Dashboard = () => {
           </ul>
 
           <div className="my-6 mt-auto ml-10 flex cursor-pointer">
-            <div>
-              <img
-                className="h-12 w-12 rounded-full"
-                src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              />
-            </div>
+            {loggedIn && (
+              <div>
+                <img
+                  className="h-12 w-12 rounded-full"
+                  src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                />
+              </div>
+            )}
             <div className="ml-3">
-              <p className="font-medium">Diana Reeves</p>
-              <p className="text-sm text-gray-300">Kyiv, Ukraine</p>
+              {!loggedIn ? (
+                <Link to="/login">
+                  <p className="font-medium">Login</p>
+                </Link>
+              ) : (
+                <p className="font-medium" onClick={logout}>
+                  Logout
+                </p>
+              )}
+              <p className="text-sm text-gray-300">
+                Status: {loggedIn ? "In" : "Out"}
+              </p>
             </div>
           </div>
         </nav>
@@ -243,8 +255,8 @@ const Dashboard = () => {
 
       <div className="flex h-full w-full flex-col">
         <header className="relative flex flex-col items-center bg-white px-4 py-4 shadow sm:flex-row md:h-20">
-          <div className="flex w-full flex-col justify-between overflow-hidden transition-all sm:max-h-full sm:flex-row sm:items-center">
-            {/* <div className="relative ml-10 flex items-center justify-between rounded-md sm:ml-auto">
+          {/* <div className="flex w-full flex-col justify-between overflow-hidden transition-all sm:max-h-full sm:flex-row sm:items-center">
+            <div className="relative ml-10 flex items-center justify-between rounded-md sm:ml-auto">
               <svg
                 className="absolute left-2 block h-5 w-5 text-gray-400"
                 xmlns="http://www.w3.org/2000/svg"
@@ -266,10 +278,10 @@ const Dashboard = () => {
                 className="h-12 w-full rounded-md border border-gray-100 bg-gray-100 py-4 pr-4 pl-12 shadow-sm outline-none focus:border-blue-500"
                 placeholder="Search for anything"
               />
-            </div> */}
+            </div>
 
-            {!user && (
-              <ul className="mx-auto mt-4 flex space-x-6 sm:mx-5 sm:mt-0">
+            {!loggedIn && (
+              <ul className="mx-auto mt-4 flex space-x-6 sm:mx-5 sm:mt-0 text-right">
                 <li className="">
                   <Link to="/login">
                     <button className="flex h-8 w-8 items-center justify-center rounded-xl border text-gray-600 hover:text-black hover:shadow">
@@ -290,50 +302,50 @@ const Dashboard = () => {
                     </button>
                   </Link>
                 </li>
-                {/* <li className="">
-                <button className="flex h-8 w-8 items-center justify-center rounded-xl border text-gray-600 hover:text-black hover:shadow">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"
-                    />
-                  </svg>
-                </button>
-              </li>
-              <li className="">
-                <button className="flex h-8 w-8 items-center justify-center rounded-xl border text-gray-600 hover:text-black hover:shadow">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                </button>
-              </li> */}
+                <li className="">
+                  <button className="flex h-8 w-8 items-center justify-center rounded-xl border text-gray-600 hover:text-black hover:shadow">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"
+                      />
+                    </svg>
+                  </button>
+                </li>
+                <li className="">
+                  <button className="flex h-8 w-8 items-center justify-center rounded-xl border text-gray-600 hover:text-black hover:shadow">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                  </button>
+                </li>
               </ul>
             )}
-          </div>
+          </div> */}
         </header>
         <div className="h-full overflow-hidden pl-10">
           <main
@@ -347,7 +359,8 @@ const Dashboard = () => {
                   return (
                     <>
                       <h1 className="text-2xl font-black text-gray-800">
-                        Good Morning! {user ? "Logged In!!" : "Login Required"}
+                        Good Morning!{" "}
+                        {loggedIn ? "You are Logged In!!" : "Login Required"}
                       </h1>
                       <p className="mb-6 text-gray-600">
                         Here's an overview of your monthly transactions.
@@ -365,16 +378,36 @@ const Dashboard = () => {
               />
               <Route path="/login" Component={Login} />
 
-              {user
+              {loggedIn
                 ? [
                     // add as many as you'd like here
                     <>
-                      <Route path="/overview" Component={Overview} />
-                      <Route path="/transaction" Component={Transaction} />
-                      <Route path="/sendMoney" Component={SendMoney} />
-                      <Route path="/payments" Component={Payments} />
-                      <Route path="/cards" Component={Cards} />
-                      <Route path="/settings" Component={Settings} />
+                      <Route
+                        key="overview"
+                        path="/overview"
+                        Component={Overview}
+                      />
+                      <Route
+                        key="transaction"
+                        path="/transaction"
+                        Component={Transaction}
+                      />
+                      <Route
+                        key="sendMoney"
+                        path="/sendMoney"
+                        Component={SendMoney}
+                      />
+                      <Route
+                        key="payments"
+                        path="/payments"
+                        Component={Payments}
+                      />
+                      <Route key="overview" path="/cards" Component={Cards} />
+                      <Route
+                        key="settings"
+                        path="/settings"
+                        Component={Settings}
+                      />
                     </>,
                   ]
                 : null}

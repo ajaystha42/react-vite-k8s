@@ -5,9 +5,10 @@ import Login from "./components/Login/Login";
 function App() {
   useEffect(() => {
     const userInfo = localStorage.getItem("user");
+
     if (userInfo) {
       const obj = JSON.parse(userInfo);
-      jwt.next(obj?.token);
+      jwt.next(obj.token);
     }
   }, []);
   return <Login />;
