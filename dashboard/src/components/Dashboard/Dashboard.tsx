@@ -1,4 +1,5 @@
 import "./../../App.css";
+
 const Dashboard = () => {
   return (
     <div className="bg-slate-200 flex h-screen">
